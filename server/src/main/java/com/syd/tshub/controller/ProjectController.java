@@ -1,6 +1,8 @@
 package com.syd.tshub.controller;
 
 import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/project")
 public class ProjectController {
 
-
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/get/{id}")
     public BaseResponse getProject(@PathVariable("id") String projectId) {

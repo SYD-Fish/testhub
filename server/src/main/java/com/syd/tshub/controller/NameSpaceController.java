@@ -1,6 +1,7 @@
 package com.syd.tshub.controller;
 
 import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.service.NameSpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/namespace")
 public class NameSpaceController {
+
+    @Autowired
+    private NameSpaceService nameSpaceService;
 
 
 

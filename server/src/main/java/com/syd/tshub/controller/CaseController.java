@@ -1,6 +1,8 @@
 package com.syd.tshub.controller;
 
 import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.service.CaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/case")
 public class CaseController {
+
+    @Autowired
+    private CaseService caseService;
 
     @GetMapping("/get/{id}")
     public BaseResponse getCase(@PathVariable("id") String caseId) {

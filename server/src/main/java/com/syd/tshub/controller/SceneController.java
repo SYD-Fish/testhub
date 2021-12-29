@@ -1,6 +1,8 @@
 package com.syd.tshub.controller;
 
 import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.service.SceneService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/scene")
 public class SceneController {
+
+    @Autowired
+    private SceneService sceneService;
 
     @GetMapping("/get/{id}")
     public BaseResponse getScene(@PathVariable("id") String sceneId) {
