@@ -1,6 +1,6 @@
 package com.syd.tshub.controller;
 
-import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

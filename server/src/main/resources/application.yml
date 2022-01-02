@@ -1,0 +1,14 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    username: "root"
+    password: "Root_1234"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://rm-uf6n6u176m4zxbd75xo.mysql.rds.aliyuncs.com:3306/test_hub?useUnicode=true&characterEncoding=utf8"
+
+
+user:
+  login:
+#    type: "redisLoginService"
+    type: "sessionLoginService"

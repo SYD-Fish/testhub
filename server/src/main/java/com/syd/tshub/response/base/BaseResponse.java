@@ -1,4 +1,4 @@
-package com.syd.tshub.common.response;
+package com.syd.tshub.response.base;
 
 import lombok.Data;
 import org.slf4j.MDC;

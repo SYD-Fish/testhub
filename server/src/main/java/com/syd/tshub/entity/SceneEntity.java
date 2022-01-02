@@ -5,8 +5,11 @@ import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -22,6 +25,9 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(
     callSuper = false
 )
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @FluentMybatis(
     table = "t_scene",
     schema = "test_hub"
@@ -29,28 +35,18 @@ import lombok.experimental.Accessors;
 public class SceneEntity extends RichEntity {
   private static final long serialVersionUID = 1L;
 
-  /**
-   */
   @TableId("id")
   private Integer id;
 
-  /**
-   */
   @TableField("create_time")
   private Date createTime;
 
-  /**
-   */
   @TableField("project_id")
   private String projectId;
 
-  /**
-   */
   @TableField("scene_name")
   private String sceneName;
 
-  /**
-   */
   @TableField("update_time")
   private Date updateTime;
 

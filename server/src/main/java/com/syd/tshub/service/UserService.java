@@ -1,5 +1,8 @@
 package com.syd.tshub.service;
 
+import com.syd.tshub.entity.UserEntity;
+import com.syd.tshub.request.UserReq;
+
 /**
  * 描述：
  *
@@ -10,4 +13,5 @@ package com.syd.tshub.service;
  * @Version 1.0
  */
 public interface UserService {
+    UserEntity getUserByLoginUser(UserReq userReq);
 }

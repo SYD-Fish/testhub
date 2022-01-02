@@ -1,11 +1,14 @@
 package com.syd.tshub.controller;
 
-import com.syd.tshub.common.response.BaseResponse;
+import com.syd.tshub.factory.UserLoginFactory;
+import com.syd.tshub.response.base.BaseResponse;
+import com.syd.tshub.request.UserReq;
+import com.syd.tshub.service.UserLoginService;
 import com.syd.tshub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 类描述：
@@ -21,7 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private HttpServletRequest request;
+
+    @Autowired
+    private UserLoginFactory userLoginFactory;
 
     @PostMapping("/register")
     public BaseResponse register() {
@@ -30,8 +36,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<String> login() {
-        return null;
+    public BaseResponse<String> login(@RequestBody UserReq userReq) {
+        // 用户检验
+
+        UserLoginService userService = userLoginFactory.getUserService();
+        return userService.login(userReq);
+    }
+
+    @DeleteMapping("/logout")
+    public BaseResponse logout() {
+        String token = request.getHeader("token");
+        UserLoginService userService = userLoginFactory.getUserService();
+        return userService.logout(token);
     }
 
 

@@ -2,6 +2,7 @@ package com.syd.tshub.dao.intf;
 
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import com.syd.tshub.entity.UserEntity;
+import com.syd.tshub.request.UserReq;
 
 /**
  * UserDao: 数据操作接口
@@ -11,4 +12,5 @@ import com.syd.tshub.entity.UserEntity;
  * <p/>@author Powered By Fluent Mybatis
  */
 public interface UserDao extends IBaseDao<UserEntity> {
+    UserEntity selectUserByLoginUser(UserReq userReq);
 }
