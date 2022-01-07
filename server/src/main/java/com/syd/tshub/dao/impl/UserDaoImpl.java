@@ -35,6 +35,9 @@ public class UserDaoImpl extends UserBaseDao implements UserDao {
                 .enable().eq(1)
                 .end();
         List<UserEntity> userEntities = userMapper.listEntity(userQuery);
-        return userEntities.get(0);
+        if (userEntities != null && userEntities.size() > 0) {
+            return userEntities.get(0);
+        }
+        return null;
     }
 }

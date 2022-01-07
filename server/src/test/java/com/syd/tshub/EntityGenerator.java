@@ -40,7 +40,7 @@ public class EntityGenerator {
             tablePrefix = "t_",
             // 设置哪些表要生成Entity文件
             tables = {@Table(value = {"t_user", "t_namespace", "t_project", "t_scene",
-            "t_case_info", "t_scene_case_rela", "t_record", "t_project"}, version = "lock_version")}
+            "t_case_info", "t_scene_case_rela", "t_record", "t_project", "t_menu"}, version = "lock_version")}
     )
     static class Empty { //类名随便取, 只是配置定义的一个载体
     }

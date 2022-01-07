@@ -1,0 +1,12 @@
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (1, '课程管理', NULL, 1, 'el-icon-reading', NULL, 1, '2022-01-03 12:35:32', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (2, '成绩管理', NULL, 2, 'el-icon-notebook-2', NULL, 1, '2022-01-03 12:50:54', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (3, '统计分析', NULL, 3, 'el-icon-data-analysis', NULL, 1, '2022-01-03 12:50:56', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (4, '系统管理', NULL, 4, 'el-icon-setting', NULL, 1, '2022-01-03 12:50:59', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (5, '排课', NULL, 5, NULL, 1, 1, '2022-01-03 12:51:01', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (6, '成绩录入', NULL, 6, NULL, 2, 1, '2022-01-03 12:51:04', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (7, '查看成绩', NULL, 7, NULL, 2, 1, '2022-01-03 12:51:07', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (8, '导出成绩', NULL, 8, NULL, 2, 1, '2022-01-03 12:51:09', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (9, '平均成绩', NULL, 9, NULL, 3, 1, '2022-01-03 12:51:12', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (10, '自定义分析', NULL, 10, NULL, 3, 1, '2022-01-03 12:51:14', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (11, '变量管理', NULL, 11, NULL, 4, 1, '2022-01-03 12:51:17', NULL);
+INSERT INTO `t_menu`(`menu_id`, `menu_name`, `path`, `index`, `icon`, `parent_id`, `enable`, `create_time`, `update_time`) VALUES (12, '日志管理', NULL, 12, NULL, 4, 1, '2022-01-03 12:51:20', NULL);

@@ -30,16 +30,20 @@ public abstract class AbstractUserLogin implements UserLoginService {
     
     @Override
     public BaseResponse<String> login(UserReq userReq) {
+        // 加密
         String password = this.encryptPassword(userReq.getPassword());
         userReq.setPassword(password);
+        // 查询db
         UserEntity user = getUserInfo(userReq);
         if (user == null) {
             return BaseResponse.fail("用户或密码错误");
         }
+        // 生成token
         String token = generateToken();
         if (StringUtils.isEmpty(token)) {
             return BaseResponse.fail("生成token失败，请联系管理员");
         }
+        // 存储并返回token
         return storeAndReturnToken(token, user);
     }
 

@@ -35,17 +35,24 @@ public class UserController {
         return BaseResponse.success();
     }
 
+    /**
+     * 登录
+     * @param userReq
+     * @return
+     */
     @PostMapping("/login")
     public BaseResponse<String> login(@RequestBody UserReq userReq) {
-        // 用户检验
-
         UserLoginService userService = userLoginFactory.getUserService();
         return userService.login(userReq);
     }
 
+    /**
+     * 登出
+     * @return
+     */
     @DeleteMapping("/logout")
     public BaseResponse logout() {
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         UserLoginService userService = userLoginFactory.getUserService();
         return userService.logout(token);
     }

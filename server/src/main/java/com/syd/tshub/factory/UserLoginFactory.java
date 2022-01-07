@@ -22,13 +22,6 @@ import javax.annotation.Resource;
 @Component
 public class UserLoginFactory {
 
-//    @Autowired
-//    @Qualifier("sessionLoginService")
-//    private UserLoginService sessionLoginService;
-//
-//    @Autowired
-//    @Qualifier("redisLoginService")
-//    private UserLoginService redisLoginService;
     @Value("${user.login.type: sessionLoginService}")
     private String userLoginType;
 
@@ -36,7 +29,10 @@ public class UserLoginFactory {
     private ApplicationContext applicationContext;
 
 
-
+    /**
+     * 工厂模式获取用户登录服务
+     * @return
+     */
     public UserLoginService getUserService() {
         return applicationContext.getBean(userLoginType, UserLoginService.class);
     }
