@@ -19,13 +19,15 @@
             :collapse="isCollapsed"
             :collapse-transition="false"
             router
+            :default-active="activePath"
         >
           <el-submenu :index="item.index + ''" v-for="item in menuList" :key="item.index">
             <template slot="title">
               <i :class="item.icon"></i>
               <span>{{item.menuName}}</span>
             </template>
-            <el-menu-item :index="child.path + ''" v-for="child in item.childs" :key="child.index">
+            <el-menu-item :index="child.path + ''" v-for="child in item.childs" :key="child.index"
+                          @click="saveNavPath(child.path)">
               <i class="el-icon-menu"></i>
               <span slot="title">{{child.menuName}}</span>
             </el-menu-item>
@@ -47,10 +49,13 @@ export default {
     return {
       menuList: [],
       isCollapsed: false,
+      activePath: "",
     }
   },
   created() {
-    this.getMenuList()
+    this.getMenuList();
+    this.activePath = window.sessionStorage.getItem("activePath");
+    if (!this.activePath) this.activePath = '/users';
   },
   methods: {
     logout() {
@@ -73,7 +78,12 @@ export default {
     },
     collapse() {
       this.isCollapsed = !this.isCollapsed;
+    },
+    saveNavPath(activePath) {
+      window.sessionStorage.setItem("activePath", activePath);
+      this.activePath = activePath;
     }
+
   }
 }
 </script>

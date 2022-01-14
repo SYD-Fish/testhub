@@ -1,20 +1,18 @@
 package com.syd.tshub.request;
 
+import com.syd.tshub.request.base.ListBaseReq;
 import lombok.Data;
 
 /**
  * 类描述：
  *
- * @ClassName UserReq
+ * @ClassName UserListReq
  * @Description TODO
  * @Author syd
- * @Date 2021/12/31 21:46
+ * @Date 2022/1/14 21:01
  * @Version 1.0
  */
 @Data
-public class UserReq {
+public class UserListReq extends ListBaseReq {
     private String username;
-    private String password;
-    private String phone;
-    private int type;
 }

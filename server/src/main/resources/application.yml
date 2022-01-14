@@ -25,5 +25,5 @@ security:
 
 user:
   login:
-    type: "redisLoginService"
-#    type: "sessionLoginService"
+#    type: "redisLoginService"
+    type: "sessionLoginService"

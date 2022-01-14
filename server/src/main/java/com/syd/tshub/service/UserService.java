@@ -1,7 +1,12 @@
 package com.syd.tshub.service;
 
 import com.syd.tshub.entity.UserEntity;
+import com.syd.tshub.request.UserCreateReq;
+import com.syd.tshub.request.UserListReq;
 import com.syd.tshub.request.UserReq;
+import com.syd.tshub.response.base.BaseResponse;
+
+import java.util.List;
 
 /**
  * 描述：
@@ -14,4 +19,10 @@ import com.syd.tshub.request.UserReq;
  */
 public interface UserService {
     UserEntity getUserByLoginUser(UserReq userReq);
+
+    BaseResponse createUser(UserCreateReq userReq);
+
+    BaseResponse listUser(UserListReq userListReq);
+
+    BaseResponse deleteUsers(List<String> userIds);
 }

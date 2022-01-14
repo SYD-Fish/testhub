@@ -1,6 +1,8 @@
 package com.syd.tshub.controller;
 
 import com.syd.tshub.factory.UserLoginFactory;
+import com.syd.tshub.request.UserCreateReq;
+import com.syd.tshub.request.UserListReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.request.UserReq;
 import com.syd.tshub.service.UserLoginService;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 类描述：
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserLoginFactory userLoginFactory;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/register")
     public BaseResponse register() {
@@ -57,6 +63,37 @@ public class UserController {
         return userService.logout(token);
     }
 
+    /**
+     * 创建用户
+     * @param userReq
+     * @return
+     */
+    @PostMapping("/create")
+    public BaseResponse createUser(@RequestBody UserCreateReq userReq) {
+        return userService.createUser(userReq);
+
+    }
+
+    /**
+     * 用户列表
+     * @param userListReq
+     * @return
+     */
+    @PostMapping("/list")
+    public BaseResponse listUser(@RequestBody UserListReq userListReq){
+        return userService.listUser(userListReq);
+    }
+
+
+    /**
+     * 删除用户 支持批量
+     * @param userIds
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public BaseResponse deleteUser(@RequestBody List<String> userIds) {
+        return userService.deleteUsers(userIds);
+    }
 
 
 
