@@ -48,8 +48,14 @@ public class UserServiceImpl implements UserService {
     public BaseResponse createUser(UserCreateReq userReq) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userReq.getUsername());
+        if (StringUtils.isEmpty(userReq.getPassword())) {
+            userReq.setPassword("123456");
+        }
         userEntity.setPassword(DigestUtils.md5DigestAsHex(userReq.getPassword().getBytes()));
         userEntity.setPhone(userReq.getPhone());
+        userEntity.setEmail(userReq.getEmail());
+        userEntity.setProfession(userReq.getProfession());
+        userEntity.setStage(userReq.getStage());
         userEntity.setCreateTime(new Date());
         userEntity.setEnable(1);
         userEntity.setRoleId(userReq.getRoleId());

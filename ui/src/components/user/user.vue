@@ -15,7 +15,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="addUser">添加用户</el-button>
         </el-col>
       </el-row>
 
@@ -89,6 +89,56 @@
           :total="total">
       </el-pagination>
     </el-card>
+<!--    add user-->
+    <el-dialog
+        title="添加用户"
+        :visible.sync="addDialogVisible"
+    >
+      <el-form ref="singleUserRef" :model="singleUserForm" :rules="singleUserRule" label-width="70px" class="add_user">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="singleUserForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="singleUserForm.phone"></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮箱" prop="email">
+          <label slot="label">邮&emsp;箱</label>
+          <el-input v-model="singleUserForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="专业" prop="profession">
+          <label slot="label">专&emsp;业</label>
+          <el-input v-model="singleUserForm.profession"></el-input>
+        </el-form-item>
+        <el-form-item label="年级" prop="stage">
+          <label slot="label">年&emsp;级</label>
+          <el-select v-model="singleUserForm.stage" placeholder="请选择年级">
+            <el-option
+                v-for="item in stageOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
+<!--          <el-input v-model="singleUserForm.stage"></el-input>-->
+        </el-form-item>
+        <el-form-item label="角色" prop="stage">
+          <label slot="label">角&emsp;色</label>
+          <el-select v-model="singleUserForm.roleId" placeholder="请选择角色">
+            <el-option
+                v-for="item in roleOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="cancleAddUser">取 消</el-button>
+    <el-button type="primary" @click="confirmAddUser">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,6 +155,30 @@ export default {
       },
       userList: [],
       total: 0,
+      addDialogVisible: false,
+      singleUserForm: {
+        stage: ''
+      },
+      singleUserRule: {
+        username: [
+          {required: true, message: "请输入用户名", trigger: 'blur'},
+          { min: 3, max: 20, message: '长度在 3 到 20个字符', trigger: 'blur' }
+        ],
+        roleId: [
+          {required: true, message: "选择角色", trigger: 'blur'}
+        ]
+      },
+      stageOptions: [
+        {value: "大一", label: "大一"},
+        {value: "大二", label: "大二"},
+        {value: "大三", label: "大三"},
+        {value: "大四", label: "大四"},
+      ],
+      roleOptions: [
+        {value: 1, label: "学生"},
+        {value: 2, label: "教师"},
+        {value: 3, label: "管理员"}
+      ]
     }
   },
   created() {
@@ -149,6 +223,32 @@ export default {
       this.queryInfo.pageIndex = pageIndex;
       this.getUserList();
 
+    },
+    addUser() {
+      this.addDialogVisible = true;
+    },
+    confirmAddUser() {
+      this.$refs.singleUserRef.validate(valid => {
+        if (!valid) return;
+        this.$http.post('/user/create', this.singleUserForm)
+            .then(res => {
+              this.addDialogVisible = false;
+              if (res.data.code == 0) {
+                this.$message.success("添加用户成功");
+                this.getUserList();
+              } else {
+                this.$message.error("添加用户失败");
+              }
+            })
+            .catch(e => {
+              this.addDialogVisible = false;
+              this.$message.error("添加用户失败, msg:" + e)
+            })
+      })
+    },
+    cancleAddUser() {
+      this.$refs.singleUserRef.resetFields();
+      this.addDialogVisible = false
     }
   }
 }
@@ -160,6 +260,10 @@ export default {
   margin-top: 15px;
   margin-right: 15px;
   width: 100%;
+}
+.add_user{
+  box-sizing: border-box;
+  padding: 0 40px;
 }
 
 </style>

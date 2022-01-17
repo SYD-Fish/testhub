@@ -14,4 +14,8 @@ import lombok.Data;
 @Data
 public class UserCreateReq extends UserReq{
     private int roleId;
+    private String email;
+    private String profession;
+    private String stage;
+
 }

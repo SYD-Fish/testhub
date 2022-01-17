@@ -56,11 +56,17 @@ public class UserEntity extends RichEntity {
   @TableField("phone")
   private String phone;
 
+  @TableField("profession")
+  private String profession;
+
   @TableField(
       value = "role_id",
       desc = "角色Id"
   )
   private Integer roleId;
+
+  @TableField("stage")
+  private String stage;
 
   @TableField("update_time")
   private Date updateTime;
