@@ -25,4 +25,6 @@ public interface UserService {
     BaseResponse listUser(UserListReq userListReq);
 
     BaseResponse deleteUsers(List<String> userIds);
+
+    BaseResponse updateUser(UserEntity user);
 }

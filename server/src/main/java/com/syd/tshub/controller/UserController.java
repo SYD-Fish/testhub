@@ -1,5 +1,6 @@
 package com.syd.tshub.controller;
 
+import com.syd.tshub.entity.UserEntity;
 import com.syd.tshub.factory.UserLoginFactory;
 import com.syd.tshub.request.UserCreateReq;
 import com.syd.tshub.request.UserListReq;
@@ -7,6 +8,8 @@ import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.request.UserReq;
 import com.syd.tshub.service.UserLoginService;
 import com.syd.tshub.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private HttpServletRequest request;
@@ -81,6 +85,7 @@ public class UserController {
      */
     @PostMapping("/list")
     public BaseResponse listUser(@RequestBody UserListReq userListReq){
+        logger.info("开始查询用户列表");
         return userService.listUser(userListReq);
     }
 
@@ -94,6 +99,12 @@ public class UserController {
     public BaseResponse deleteUser(@RequestBody List<String> userIds) {
         return userService.deleteUsers(userIds);
     }
+
+    @PutMapping("/update")
+    public BaseResponse updateUser(@RequestBody UserEntity user) {
+        return userService.updateUser(user);
+    }
+
 
 
 
