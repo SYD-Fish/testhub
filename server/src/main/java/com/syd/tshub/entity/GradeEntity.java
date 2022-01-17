@@ -4,6 +4,7 @@ import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,11 +50,20 @@ public class GradeEntity extends RichEntity {
   )
   private String courseName;
 
+  @TableField("create_time")
+  private Date createTime;
+
+  @TableField("enbal")
+  private Integer enbal;
+
   @TableField(
       value = "grade",
       desc = "成绩"
   )
   private Integer grade;
+
+  @TableField("update_time")
+  private Date updateTime;
 
   @TableField(
       value = "user_id",

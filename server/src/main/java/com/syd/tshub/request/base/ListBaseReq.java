@@ -15,4 +15,5 @@ import lombok.Data;
 public abstract class ListBaseReq {
     private int pageIndex;
     private int pageSize;
+    private String content;
 }
