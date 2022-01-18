@@ -32,17 +32,27 @@
         <el-table-column
             prop="userName"
             label="姓名"
-            width="180">
+            width="120">
         </el-table-column>
         <el-table-column
             prop="phone"
             label="电话"
-            width="180">
+            width="120">
         </el-table-column>
         <el-table-column
             prop="email"
             label="邮箱"
             width="180">
+        </el-table-column>
+        <el-table-column
+            prop="profession"
+            label="专业"
+            width="120">
+        </el-table-column>
+        <el-table-column
+            prop="stage"
+            label="年级"
+            width="120">
         </el-table-column>
         <el-table-column
             prop="createTime"
@@ -52,7 +62,7 @@
         </el-table-column>
         <el-table-column
             label="状态"
-            width="180"
+            width="120"
             filter-placement="bottom-end">
           <template slot-scope="scope">
 <!--            <el-tag-->
@@ -67,6 +77,18 @@
                 @change="userStatusChange(scope.row)"
              >
             </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column
+            label="角色"
+            width="120"
+            filter-placement="bottom-end">
+          <template slot-scope="scope">
+            <el-tag
+                :type="scope.row.roleId === 1 ? 'primary' : (scope.row.roleId === 2 ? 'success' : 'warning')"
+                disable-transitions>
+              {{scope.row.roleId == 1 ? '学生' : (scope.row.roleId === 2 ? '教师' : '管理员')}}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作">

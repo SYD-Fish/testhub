@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService {
                     .userName().like(userListReq.getUsername())
                     .end();
         }
+        if (userListReq.getRoleId() != null) {
+            userQuery.where.roleId().eq(userListReq.getRoleId()).end();
+        }
         userQuery.orderBy().createTime().desc()
                 .end()
                 .limit(( userListReq.getPageIndex() -1) * userListReq.getPageSize(), userListReq.getPageSize());

@@ -15,4 +15,5 @@ import lombok.Data;
 @Data
 public class UserListReq extends ListBaseReq {
     private String username;
+    private Integer roleId;
 }
