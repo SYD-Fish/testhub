@@ -27,3 +27,6 @@ user:
   login:
 #    type: "redisLoginService"
     type: "sessionLoginService"
+logging:
+  level:
+    com.syd.tshub.mapper: debug

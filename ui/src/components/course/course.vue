@@ -32,12 +32,12 @@
         <el-table-column
             prop="courseName"
             label="课程名称"
-            width="120">
+            width="180">
         </el-table-column>
         <el-table-column
             prop="classRoom"
             label="教室名称"
-            width="120">
+            width="180">
         </el-table-column>
         <el-table-column
             prop="count"
@@ -47,7 +47,7 @@
         <el-table-column
             prop="teacherName"
             label="授课老师"
-            width="120">
+            width="180">
         </el-table-column>
         <el-table-column
             prop="createTime"
@@ -81,7 +81,7 @@
         title="添加课程"
         :visible.sync="addDialogVisible"
     >
-      <el-form ref="singleUserRef" :model="singleCourseForm" :rules="singleCourseRule" label-width="80px" class="add_user">
+      <el-form ref="singleCourseRef" :model="singleCourseForm" :rules="singleCourseRule" label-width="80px" class="add_user">
         <el-form-item label="课程名称" prop="courseName">
           <el-input v-model="singleCourseForm.courseName"></el-input>
         </el-form-item>
@@ -96,7 +96,7 @@
             <el-option
                 v-for="item in teachers"
                 :key="item.userId"
-                :label="item.username"
+                :label="item.userName"
                 :value="item.userId">
             </el-option>
           </el-select>
@@ -170,12 +170,12 @@ export default {
 
     },
     handleDelete(row) {
-      const ids = [];
-      ids.concat(row.id)
-      this.$http.delete("/course/delete", ids)
+      const ids = [row.id];
+      this.$http.delete("/course/delete", {data: ids})
       .then(res => {
         if (res.data.code == 0) {
           this.$message.success("删除课程"+ row.courseName +"成功");
+          this.getCourseList()
         } else {
           this.$message.error("删除课程"+ row.courseName + "失败")
         }
@@ -188,20 +188,28 @@ export default {
       this.addDialogVisible = false;
     },
     confirmAdd() {
-      this.$http.post("/course/create", this.singleCourseForm)
-      .then(res => {
-        this.addDialogVisible = false;
-        if (res.data.code == 0) {
-          this.$message.success("添加课程:" + this.singleCourseForm.courseName + "成功")
-          this.getCourseList()
-        } else {
-          this.$message.error("添加课程:" + this.singleCourseForm.courseName + "失败")
-        }
-      })
-      .catch(e => {
-        this.addDialogVisible = false;
-        this.$message.error("添加课程:" + this.singleCourseForm.courseName + "失败" + e)
-      })
+      this.$refs.singleCourseRef.validate(valid => {
+        if (!valid) return;
+        let index = this.teachers.findIndex((t) =>{
+          return t.userId == this.singleCourseForm.teacherId;
+        });
+        this.singleCourseForm.teacherName = this.teachers[index].userName;
+        this.$http.post("/course/create", this.singleCourseForm)
+            .then(res => {
+              this.addDialogVisible = false;
+              if (res.data.code == 0) {
+                this.$message.success("添加课程:" + this.singleCourseForm.courseName + "成功")
+                this.singleCourseForm = {}
+                this.getCourseList()
+              } else {
+                this.$message.error("添加课程:" + this.singleCourseForm.courseName + "失败")
+              }
+            })
+            .catch(e => {
+              this.addDialogVisible = false;
+              this.$message.error("添加课程:" + this.singleCourseForm.courseName + "失败" + e)
+            })
+      });
     },
     dateFormat (row, column) {
       var date = row[column.property];

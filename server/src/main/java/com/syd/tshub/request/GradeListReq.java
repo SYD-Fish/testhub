@@ -15,4 +15,5 @@ import lombok.Data;
 @Data
 public class GradeListReq extends ListBaseReq {
     private Integer courseId;
+    private Integer userId;
 }

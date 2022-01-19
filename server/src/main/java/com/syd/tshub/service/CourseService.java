@@ -20,7 +20,7 @@ public interface CourseService {
 
     BaseResponse listCourse(CourseListReq courseListReq);
 
-    BaseResponse deleteCourse(List<String> courseIds);
+    BaseResponse deleteCourse(List<Integer> courseIds);
 
     BaseResponse updateCourse(CourseEntity course);
 }

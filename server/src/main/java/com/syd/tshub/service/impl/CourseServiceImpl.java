@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public BaseResponse createCourse(CourseEntity course) {
+        course.setEnable(1);
+        course.setCreateTime(new Date());
         int insert = courseDao.mapper().insert(course);
         return BaseResponse.success();
     }
@@ -50,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse deleteCourse(List<String> courseIds) {
+    public BaseResponse deleteCourse(List<Integer> courseIds) {
         courseDao.mapper().deleteByIds(courseIds);
         return BaseResponse.success();
     }

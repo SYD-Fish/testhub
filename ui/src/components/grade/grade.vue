@@ -3,25 +3,38 @@
     <!--    bread crumb-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>课程管理</el-breadcrumb-item>
-      <el-breadcrumb-item>课程列表</el-breadcrumb-item>
+      <el-breadcrumb-item>成绩管理</el-breadcrumb-item>
+      <el-breadcrumb-item>成绩列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!--    card view-->
     <el-card>
       <el-row :gutter="30">
+        <el-col :span="4">
+          <el-select v-model="queryInfo.courseId"
+                     default-first-option
+                     @change="getGradeList"
+                     placeholder="请选择课程名称">
+            <el-option
+                v-for="item in courseList"
+                :key="item.id"
+                :label="item.courseName"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </el-col>
         <el-col :span="8">
-          <el-input placeholder="请输入课程名称">
-            <el-button slot="append" icon="el-icon-search" ></el-button>
+          <el-input placeholder="请输入搜索内容">
+            <el-button slot="append" icon="el-icon-search" @click="getGradeList"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="showAddDialog" >添加课程</el-button>
+          <el-button type="primary" @click="showAddDialog" >打分</el-button>
         </el-col>
       </el-row>
 
       <el-table
           ref="filterTable"
-          :data="courseList"
+          :data="gradeList"
           border
           stripe
           style="width: 100%;">
@@ -32,64 +45,23 @@
         <el-table-column
             prop="userName"
             label="姓名"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="phone"
-            label="电话"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="email"
-            label="邮箱"
             width="180">
         </el-table-column>
         <el-table-column
-            prop="profession"
-            label="专业"
-            width="120">
+            prop="courseName"
+            label="课程名称"
+            width="180">
         </el-table-column>
         <el-table-column
-            prop="stage"
-            label="年级"
-            width="120">
+            prop="grade"
+            label="成绩"
+            width="180">
         </el-table-column>
         <el-table-column
             prop="createTime"
             label="创建日期"
             :formatter="dateFormat"
             width="180">
-        </el-table-column>
-        <el-table-column
-            label="状态"
-            width="120"
-            filter-placement="bottom-end">
-          <template slot-scope="scope">
-            <!--            <el-tag-->
-            <!--                :type="scope.row.enable === '1' ? 'primary' : 'success'"-->
-            <!--                disable-transitions>-->
-            <!--              {{scope.row.enable == 1 ? '有效' : '无效'}}-->
-            <!--            </el-tag>-->
-            <el-switch
-                v-model="scope.row.enable"
-                :active-value="1"
-                :inactive-value="0"
-                @change="userStatusChange(scope.row)"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column
-            label="角色"
-            width="120"
-            filter-placement="bottom-end">
-          <template slot-scope="scope">
-            <el-tag
-                :type="scope.row.roleId === '1' ? 'primary' : (scope.row.roleId === 2 ? 'success' : 'warn')"
-                disable-transitions>
-              {{ scope.row.roleId == 1 ? '学生' : (scope.row.roleId === 2 ? '教师' : '管理员') }}
-            </el-tag>
-          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -114,18 +86,45 @@
     </el-card>
     <!--    add user-->
     <el-dialog
-        title="添加课程"
+        title="添加成绩"
         :visible.sync="addDialogVisible"
     >
-      <el-form ref="singleUserRef" :model="singleCourseForm" :rules="singleCourseRule" label-width="70px" class="add_user">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="singleCourseForm.username"></el-input>
-        </el-form-item>
-
-      </el-form>
+<!--      course selector start -->
+<!--      <el-select v-model="studentQuery.courseId" placeholder="请选择课程名称">-->
+<!--        <el-option-->
+<!--            v-for="item in courseList"-->
+<!--            :key="item.id"-->
+<!--            :label="item.courseName"-->
+<!--            :value="item.id">-->
+<!--        </el-option>-->
+<!--      </el-select>-->
+      <!--      course selector end -->
+      <el-table :data="studentList">
+        <el-table-column label="序号" type="index"></el-table-column>
+        <el-table-column property="userName" label="姓名" width="120"></el-table-column>
+        <el-table-column label="课程编号" width="150">
+          <template>
+            <el-tag>{{queryInfo.courseId}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="成绩" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.grade"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+                size="mini"
+                type="danger"
+                @click="confirmAdd(scope.row)">确认
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="cancleAdd">取 消</el-button>
-    <el-button type="primary" @click="confirmAdd">确 定</el-button>
+    <el-button @click="cancleAdd">关闭</el-button>
+<!--    <el-button type="primary" @click="confirmAdd">关闭</el-button>-->
   </span>
     </el-dialog>
   </div>
@@ -138,38 +137,131 @@ export default {
   name: "grade",
   data() {
     return {
-      courseList: [],
+      gradeList: [],
       queryInfo: {
         pageIndex: 1,
         pageSize: 10,
-        content: ''
+        content: '',
+        courseId: ''
       },
       total: 0,
+      courseList: {},
       addDialogVisible: false,
-      singleCourseForm: {},
-      singleCourseRule: {}
+      studentQuery: {
+        pageIndex: 1,
+        pageSize: 10
+      },
+      studentList: []
 
     }
   },
+  created() {
+    this.getGradeList();
+    this.getCourseList();
+  },
+  filters: {
+    // courseFilter(courseId) {
+      // if (this.courseList.length > 0) {
+      //   let index = this.courseList.findIndex((c) => {
+      //     return c.id == courseId
+      //   })
+      //   return this.courseList[index].courseName;
+      // } else {
+      //   return ''
+      // }
+
+    // }
+  },
   methods: {
+    getGradeList() {
+      this.$http.post("/grade/list", this.queryInfo)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.gradeList = res.data.data.data;
+              this.total = res.data.data.total;
+            }
+          })
+    },
+    getCourseList() {
+      let param = {
+        pageIndex: 1,
+        pageSize: 100
+      }
+      this.$http.post("/course/list", param)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.courseList = res.data.data.data;
+              // this.total = res.data.data.total;
+              if (this.queryInfo.courseId == '') {
+                this.queryInfo.courseId = this.courseList[0].id;
+              }
+            }
+          })
+    },
+    getStudentList() {
+      this.studentQuery.courseId = this.queryInfo.courseId;
+      this.$http.post("/grade/students", this.studentQuery)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.studentList = res.data.data;
+              // this.total = res.data.data.total;
+            }
+          })
+    },
     handleSizeChange(pageSize) {
       this.queryInfo.pageSize = pageSize;
       this.getUserList();
 
     },
+    handleDelete(row) {
+      const ids = [row.id];
+      this.$http.delete("/grade/delete", {data: ids})
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message.success("删除学生"+ row.userName +"成绩成功");
+              this.getGradeList()
+            } else {
+              this.$message.error("删除学生"+ row.userName + "成绩失败")
+            }
+          })
+    },
     handleCurrentChange(pageIndex) {
       this.queryInfo.pageIndex = pageIndex;
-      this.getUserList();
+      this.getGradeList();
 
     },
     showAddDialog() {
+      this.getStudentList();
       this.addDialogVisible = true;
     },
     cancleAdd() {
+      this.getGradeList();
       this.addDialogVisible = false;
     },
-    confirmAdd() {
-      this.addDialogVisible = false;
+    confirmAdd(row) {
+      let param = {
+        userId: row.userId,
+        userName: row.userName,
+        grade: row.grade,
+        courseId: '',
+        courseName: ''
+      }
+      param.courseId = this.queryInfo.courseId;
+      let index = this.courseList.findIndex((c) =>{
+        return c.id == this.queryInfo.courseId;
+      })
+      param.courseName = this.courseList[index].courseName;
+      this.$http.post("/grade/create", [param])
+      .then(res => {
+        if (res.data.code == 0) {
+          let index = this.studentList.findIndex((s)=>{
+            return s.userId = param.userId
+          })
+          this.studentList.splice(index, 1);
+        } else {
+          this.$message.error("添加成绩失败")
+        }
+      })
     },
     dateFormat (row, column) {
       var date = row[column.property];

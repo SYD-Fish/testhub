@@ -57,7 +57,7 @@ public class CourseEntity extends RichEntity {
   private String courseName;
 
   @TableField("create_time")
-  private String createTime;
+  private Date createTime;
 
   @TableField(
       value = "enable",

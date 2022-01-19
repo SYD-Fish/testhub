@@ -1,5 +1,6 @@
 package com.syd.tshub.controller;
 
+import com.syd.tshub.common.util.ExcelUtil;
 import com.syd.tshub.entity.GradeEntity;
 import com.syd.tshub.entity.GradeEntity;
 import com.syd.tshub.request.GradeListReq;
@@ -8,6 +9,7 @@ import com.syd.tshub.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ import java.util.List;
  * @Version 1.0
  */
 @RestController
-@RequestMapping("/Grade")
+@RequestMapping("/grade")
 public class GradeController {
     
     @Autowired
@@ -47,6 +49,16 @@ public class GradeController {
         return gradeService.listGrade(gradeListReq);
     }
 
+    /**
+     * 未打分学生列表
+     * @param gradeListReq
+     * @return
+     */
+    @PostMapping("/students")
+    public BaseResponse gradeStudents(@RequestBody GradeListReq gradeListReq){
+        return gradeService.gradeStudents(gradeListReq);
+    }
+
 
     /**
      * 删除成绩 支持批量
@@ -67,5 +79,18 @@ public class GradeController {
     public BaseResponse updateGrade(@RequestBody GradeEntity grade) {
         return gradeService.updateGrade(grade);
     }
+
+    @RequestMapping("/export")
+    public BaseResponse exportGrade(HttpServletResponse response,
+                                    @RequestParam("userId") Integer userId,
+                                    @RequestParam("courseId") Integer courseId) {
+
+        List<GradeEntity> grades = gradeService.exportGrades(userId, courseId);
+
+        ExcelUtil.export(response, "student_grades", "grade", grades, GradeEntity.class);
+
+        return BaseResponse.success();
+    }
+
     
 }

@@ -23,4 +23,6 @@ public interface ScheduleService {
     BaseResponse updateSchedule(ScheduleEntity schedule);
 
     BaseResponse createSchedule(ScheduleEntity schedule);
+
+    BaseResponse listScheduleCourse(ScheduleListReq scheduleListReq);
 }

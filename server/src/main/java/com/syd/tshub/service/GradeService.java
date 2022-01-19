@@ -24,4 +24,8 @@ public interface GradeService {
     BaseResponse deleteGrade(List<String> gradeIds);
 
     BaseResponse updateGrade(GradeEntity grade);
+
+    BaseResponse gradeStudents(GradeListReq gradeListReq);
+
+    List<GradeEntity> exportGrades(Integer userId, Integer courseId);
 }

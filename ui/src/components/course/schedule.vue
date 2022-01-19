@@ -4,24 +4,24 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>课程管理</el-breadcrumb-item>
-      <el-breadcrumb-item>课程列表</el-breadcrumb-item>
+      <el-breadcrumb-item>排课</el-breadcrumb-item>
     </el-breadcrumb>
     <!--    card view-->
     <el-card>
       <el-row :gutter="30">
         <el-col :span="8">
-          <el-input placeholder="请输入课程名称">
+          <el-input placeholder="请输入搜索内容" v-model="queryInfo.content">
             <el-button slot="append" icon="el-icon-search" ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="showAddDialog" >添加课程</el-button>
+          <el-button type="warning" @click="showAddDialog" >添加</el-button>
         </el-col>
       </el-row>
 
       <el-table
           ref="filterTable"
-          :data="courseList"
+          :data="scheduleList"
           border
           stripe
           style="width: 100%;">
@@ -30,67 +30,41 @@
             type="index">
         </el-table-column>
         <el-table-column
-            prop="userName"
-            label="姓名"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="phone"
-            label="电话"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="email"
-            label="邮箱"
+            prop="courseName"
+            label="课程名称"
             width="180">
         </el-table-column>
         <el-table-column
-            prop="profession"
-            label="专业"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="stage"
-            label="年级"
-            width="120">
-        </el-table-column>
-        <el-table-column
-            prop="createTime"
-            label="创建日期"
-            :formatter="dateFormat"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            label="状态"
-            width="120"
-            filter-placement="bottom-end">
-          <template slot-scope="scope">
-            <!--            <el-tag-->
-            <!--                :type="scope.row.enable === '1' ? 'primary' : 'success'"-->
-            <!--                disable-transitions>-->
-            <!--              {{scope.row.enable == 1 ? '有效' : '无效'}}-->
-            <!--            </el-tag>-->
-            <el-switch
-                v-model="scope.row.enable"
-                :active-value="1"
-                :inactive-value="0"
-                @change="userStatusChange(scope.row)"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column
-            label="角色"
-            width="120"
+            prop="timePeriod"
+            label="上课时间"
+            width="180"
             filter-placement="bottom-end">
           <template slot-scope="scope">
             <el-tag
-                :type="scope.row.roleId === '1' ? 'primary' : (scope.row.roleId === 2 ? 'success' : 'warn')"
+                type="success"
                 disable-transitions>
-              {{ scope.row.roleId == 1 ? '学生' : (scope.row.roleId === 2 ? '教师' : '管理员') }}
+              {{ scope.row.timePeriod | courseTimeFilter }}
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column
+            prop="startDate"
+            label="开始日期"
+            :formatter="formatDate"
+            width="240">
+        </el-table-column>
+        <el-table-column
+            prop="endDate"
+            label="结束日期"
+            :formatter="formatDate"
+            width="240">
+        </el-table-column>
+<!--        <el-table-column-->
+<!--            prop="createTime"-->
+<!--            label="创建日期"-->
+<!--            :formatter="formatTime"-->
+<!--            width="180">-->
+<!--        </el-table-column>-->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -117,9 +91,41 @@
         title="添加课程"
         :visible.sync="addDialogVisible"
     >
-      <el-form ref="singleUserRef" :model="singleCourseForm" :rules="singleCourseRule" label-width="70px" class="add_user">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="singleCourseForm.username"></el-input>
+      <el-form ref="singleScheduleRef" :model="singleScheduleForm" :rules="singleScheduleRule" label-width="100px" class="add_user">
+        <el-form-item label="课程名称" prop="courseId">
+          <el-select v-model="singleScheduleForm.courseId" placeholder="请选择课程">
+            <el-option
+                v-for="item in scheduleCourseList"
+                :key="item.id"
+                :label="item.courseName"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="上课时间" prop="timePeriod">
+          <el-select v-model="singleScheduleForm.timePeriod" placeholder="请选择上课时间">
+            <el-option
+                v-for="item in courseTimeList"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="开始日期" prop="startDate">
+          <el-date-picker
+              v-model="singleScheduleForm.startDate"
+              type="date"
+              placeholder="选择开始日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束日期" prop="endDate">
+          <el-date-picker
+              v-model="singleScheduleForm.endDate"
+              type="date"
+              placeholder="选择结束日期">
+          </el-date-picker>
         </el-form-item>
 
       </el-form>
@@ -138,7 +144,7 @@ export default {
   name: "schedule",
   data() {
     return {
-      courseList: [],
+      scheduleList: [],
       queryInfo: {
         pageIndex: 1,
         pageSize: 10,
@@ -146,21 +152,90 @@ export default {
       },
       total: 0,
       addDialogVisible: false,
-      singleCourseForm: {},
-      singleCourseRule: {}
+      courseTimeList: [
+        {'key': 1, 'value': '8:00 ~ 9:45'},
+        {'key': 2, 'value': '10:00 ~ 11:45'},
+        {'key': 3, 'value': '13:00 ~ 14:45'},
+        {'key': 4, 'value': '15:00 ~ 16:45'},
+      ],
+      singleScheduleForm: {},
+      singleScheduleRule: {
+        courseId: [
+          {required: true, message: "请选择课程名称", trigger: 'blur'}
+        ],
+        timePeriod: [
+          {required: true, message: "请选择上课时间", trigger: 'blur'}
+        ],
+        startDate: [
+          {required: true, message: "请选择开始日期", trigger: 'blur'}
+        ],
+      },
+      scheduleCourseList: []
 
     }
   },
+  created() {
+    this.getScheduleList();
+    this.getScheduleCourseList()
+  },
+  filters: {
+    courseTimeFilter(timePeriod) {
+      switch (timePeriod) {
+        case 1:
+          return '8:00 ~ 9:45'
+        case 2:
+          return '10:00 ~ 11:45'
+        case 3:
+          return '13:00 ~ 14:45'
+        case 4:
+          return '15:00 ~ 16:45'
+      }
+    }
+  },
   methods: {
+    getScheduleList() {
+
+      this.$http.post("/schedule/list", this.queryInfo)
+      .then(res => {
+        if (res.data.code == 0) {
+          this.scheduleList = res.data.data.data;
+          this.total = res.data.data.total;
+        }
+      })
+    },
+    getScheduleCourseList() {
+      let query = {
+        pageIndex: 1,
+        pageSize: 100
+      }
+      this.$http.post("/schedule/courses", query)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.scheduleCourseList = res.data.data;
+            }
+          })
+    },
     handleSizeChange(pageSize) {
       this.queryInfo.pageSize = pageSize;
-      this.getUserList();
+      this.getScheduleList();
 
     },
     handleCurrentChange(pageIndex) {
       this.queryInfo.pageIndex = pageIndex;
-      this.getUserList();
+      this.getScheduleList();
 
+    },
+    handleDelete(row) {
+      const ids = [row.id];
+      this.$http.delete("/schedule/delete", {data: ids})
+          .then(res => {
+            if (res.data.code == 0) {
+              this.$message.success("删除课程"+ row.courseName +"成功");
+              this.getCourseList()
+            } else {
+              this.$message.error("删除课程"+ row.courseName + "失败")
+            }
+          })
     },
     showAddDialog() {
       this.addDialogVisible = true;
@@ -169,13 +244,39 @@ export default {
       this.addDialogVisible = false;
     },
     confirmAdd() {
-      this.addDialogVisible = false;
+      this.$refs.singleScheduleRef.validate(valid => {
+        if (!valid) return;
+        let index = this.scheduleCourseList.findIndex((t) =>{
+          return t.id == this.singleScheduleForm.courseId;
+        });
+        this.singleScheduleForm.courseName = this.scheduleCourseList[index].courseName;
+        this.$http.post("/schedule/create", this.singleScheduleForm)
+            .then(res => {
+              this.addDialogVisible = false;
+              if (res.data.code == 0) {
+                this.$message.success("添加课程:" + this.singleScheduleForm.courseName + "成功")
+                this.singleScheduleForm = {};
+                this.getScheduleList()
+              } else {
+                this.$message.error("添加课程:" + this.singleScheduleForm.courseName + "失败")
+              }
+            })
+            .catch(e => {
+              this.addDialogVisible = false;
+              this.$message.error("添加课程:" + this.singleScheduleForm.courseName + "失败" + e)
+            })
+      });
     },
-    dateFormat (row, column) {
+    formatTime (row, column) {
       var date = row[column.property];
       if(date == undefined){return ''}
       return moment(date).format("YYYY-MM-DD HH:mm:ss");
     },
+    formatDate(row, column) {
+      var date = row[column.property];
+      if(date == undefined){return ''}
+      return moment(date).format("YYYY-MM-DD");
+    }
 
   }
 }

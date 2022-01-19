@@ -41,6 +41,12 @@ public class ScheduleEntity extends RichEntity {
   @TableField("course_id")
   private Integer courseId;
 
+  @TableField(
+      value = "course_name",
+      desc = "课程名称"
+  )
+  private String courseName;
+
   @TableField("enable")
   private Integer enable;
 

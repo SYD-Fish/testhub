@@ -222,12 +222,12 @@ export default {
       return moment(date).format("YYYY-MM-DD HH:mm:ss");
     },
     handleDelete(row) {
-      const userIds = [];
-      userIds.concat(row.userId)
-      this.$http.delete("/user/delete", userIds)
+      const userIds = [row.userId];
+      this.$http.delete("/user/delete", {data: userIds})
       .then(res => {
         if (res.data.code == 0) {
           this.$message.success("删除用户"+ row.userName +"成功");
+          this.getUserList()
         } else {
           this.$message.error("删除用户"+ row.userName + "失败")
         }
@@ -257,6 +257,7 @@ export default {
               this.addDialogVisible = false;
               if (res.data.code == 0) {
                 this.$message.success("添加用户成功");
+                this.singleUserForm = {}
                 this.getUserList();
               } else {
                 this.$message.error("添加用户失败");

@@ -56,7 +56,7 @@ public class CourseController {
      * @return
      */
     @DeleteMapping("/delete")
-    public BaseResponse deleteCourse(@RequestBody List<String> courseIds) {
+    public BaseResponse deleteCourse(@RequestBody List<Integer> courseIds) {
         return courseService.deleteCourse(courseIds);
     }
 

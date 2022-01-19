@@ -45,6 +45,16 @@ public class ScheduleController {
         return scheduleService.listSchedule(scheduleListReq);
     }
 
+    /**
+     * 可排课的课程列表
+     * @param scheduleListReq
+     * @return
+     */
+    @PostMapping("/courses")
+    public BaseResponse listScheduleCourse(@RequestBody ScheduleListReq scheduleListReq){
+        return scheduleService.listScheduleCourse(scheduleListReq);
+    }
+
 
     /**
      * 删除排课 支持批量
