@@ -4,12 +4,15 @@ import com.syd.tshub.common.util.ExcelUtil;
 import com.syd.tshub.entity.GradeEntity;
 import com.syd.tshub.entity.GradeEntity;
 import com.syd.tshub.request.GradeListReq;
+import com.syd.tshub.response.GradeExcel;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.GradeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,15 +84,22 @@ public class GradeController {
     }
 
     @RequestMapping("/export")
-    public BaseResponse exportGrade(HttpServletResponse response,
+    public void exportGrade(HttpServletResponse response,
                                     @RequestParam("userId") Integer userId,
                                     @RequestParam("courseId") Integer courseId) {
 
         List<GradeEntity> grades = gradeService.exportGrades(userId, courseId);
 
-        ExcelUtil.export(response, "student_grades", "grade", grades, GradeEntity.class);
+        List<GradeExcel> gradeExcels = new ArrayList<>();
+        grades.forEach(gradeEntity -> {
+            GradeExcel gradeExcel = new GradeExcel();
+            BeanUtils.copyProperties(gradeEntity, gradeExcel);
+            gradeExcels.add(gradeExcel);
+        });
 
-        return BaseResponse.success();
+        ExcelUtil.export(response, "grades.xlsx", "grade", gradeExcels, GradeExcel.class);
+
+//        return BaseResponse.success();
     }
 
     

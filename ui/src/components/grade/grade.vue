@@ -27,8 +27,11 @@
             <el-button slot="append" icon="el-icon-search" @click="getGradeList"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="2">
           <el-button type="primary" @click="showAddDialog" >打分</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="success" @click="exportGrades" >导出</el-button>
         </el-col>
       </el-row>
 
@@ -173,6 +176,55 @@ export default {
     // }
   },
   methods: {
+    exportGrades() {
+      this.$http({
+        url: '/grade/export?courseId='+this.queryInfo.courseId+'&userId=',
+        method: 'get',
+        responseType: 'blob'
+      }).then(res=>{
+        const blob = new Blob([res.data], { type: 'application/vnd.ms.xlsx;charset=utf-8' });
+        var time =
+            new Date().getHours() +
+            "" +
+            new Date().getMinutes() +
+            "" +
+            new Date().getSeconds()
+        const fileName = "学生成绩_" + time +".xlsx";
+
+        if ("download" in document.createElement("a")) {
+          // 非IE下载
+          const elink = document.createElement("a");
+          elink.download = fileName;
+          elink.style.display = "none";
+          elink.href = URL.createObjectURL(blob);
+          document.body.appendChild(elink);
+          elink.click();
+          URL.revokeObjectURL(elink.href); // 释放URL 对象
+          document.body.removeChild(elink);
+        } else {
+          // IE10+下载
+          navigator.msSaveBlob(blob, fileName);
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+
+      this.$http.get("/grade/export?courseId="+this.queryInfo.courseId+"&userId=", {responseType: 'blob'})
+      .then(fileData => {
+        this.download(fileData)
+      })
+    },
+
+    // download(fileData){
+    //   const url = window.URL.createObjectURL(new Blob([fileData],{type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'}))
+    //   const link = document.createElement('a')
+    //   link.href = url
+    //   link.setAttribute('download', '学生成绩.xlsx') // 下载文件的名称及文件类型后缀
+    //   document.body.appendChild(link)
+    //   link.click()
+    //   document.body.removeChild(link); // 下载完成移除元素
+    //   window.URL.revokeObjectURL(url); // 释放掉blob对象
+    // },
     getGradeList() {
       this.$http.post("/grade/list", this.queryInfo)
           .then(res => {
