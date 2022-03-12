@@ -1,18 +1,25 @@
 package com.syd.tshub.service.impl;
 
 import com.syd.tshub.dao.intf.CourseDao;
+import com.syd.tshub.dao.intf.StudentCourseDao;
 import com.syd.tshub.entity.CourseEntity;
+import com.syd.tshub.entity.StudentCourseEntity;
+import com.syd.tshub.entity.UserEntity;
 import com.syd.tshub.request.CourseListReq;
+import com.syd.tshub.request.StudentCourseListReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.CourseService;
 import com.syd.tshub.wrapper.CourseQuery;
+import com.syd.tshub.wrapper.StudentCourseQuery;
 import com.syd.tshub.wrapper.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 类描述：
@@ -28,6 +35,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private StudentCourseDao studentCourseDao;
 
     @Override
     public BaseResponse createCourse(CourseEntity course) {
@@ -62,5 +72,36 @@ public class CourseServiceImpl implements CourseService {
     public BaseResponse updateCourse(CourseEntity course) {
         courseDao.mapper().updateById(course);
         return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse studentSelectCourse(StudentCourseEntity studentCourse) {
+        studentCourseDao.save(studentCourse);
+        return BaseResponse.success(studentCourse);
+    }
+
+    @Override
+    public BaseResponse teacherConfirmCourse(StudentCourseEntity studentCourse) {
+        studentCourseDao.updateById(studentCourse);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse<List<StudentCourseEntity>> listStudentCourse(StudentCourseListReq req, UserEntity user) {
+        List<CourseEntity> courses = courseDao.mapper().listEntity(new CourseQuery().where
+                .teacherId().eq(user.getUserId())
+                .and.enable().eq(1).end());
+        if (CollectionUtils.isEmpty(courses)) {
+            return BaseResponse.success();
+        }
+        List<Integer> courseIds = courses.stream().map(CourseEntity::getId).collect(Collectors.toList());
+        StudentCourseQuery query = new StudentCourseQuery();
+        query.where.courseId().in(courseIds).end();
+        if (req.getStatus() != null) {
+            query.where.status().eq(req.getStatus());
+        }
+        query.limit((req.getPageIndex()-1) * req.getPageSize(), req.getPageSize());
+        List<StudentCourseEntity> list = studentCourseDao.mapper().listEntity(query);
+        return BaseResponse.success(list);
     }
 }

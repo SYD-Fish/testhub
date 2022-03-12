@@ -2,8 +2,6 @@ package com.syd.tshub.common.util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -12,6 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 /**
  * 加解密工具类
@@ -30,8 +29,8 @@ public class AESUtil {
 
     private static Cipher cipher;
     private static KeyGenerator kgen;
-    private static BASE64Encoder encoder = new BASE64Encoder();
-    private static BASE64Decoder decoder = new BASE64Decoder();
+    private static Base64.Encoder encoder = Base64.getEncoder();
+    private static Base64.Decoder decoder = Base64.getDecoder();
 
     static {
         try {
@@ -50,7 +49,7 @@ public class AESUtil {
     }
 
     public String decode(String secretContent) throws Exception {
-        byte[] bytes = decoder.decodeBuffer(secretContent);
+        byte[] bytes = decoder.decode(secretContent);
         String value = aesDecryptByBytes(bytes, keySeed);
         return value;
     }

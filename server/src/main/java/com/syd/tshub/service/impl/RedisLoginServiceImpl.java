@@ -1,5 +1,6 @@
 package com.syd.tshub.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.syd.tshub.common.util.RedisUtil;
 import com.syd.tshub.entity.UserEntity;
 import com.syd.tshub.response.base.BaseResponse;
@@ -47,5 +48,17 @@ public class RedisLoginServiceImpl extends AbstractUserLogin implements UserLogi
     public BaseResponse logout(String token) {
         redisUtil.remove(token);
         return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse<UserEntity> getCurrentLoginUser(String token) {
+        try {
+            String value = redisUtil.getValue(token);
+            UserEntity userEntity = JSON.parseObject(value, UserEntity.class);
+            return BaseResponse.success(userEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResponse.fail(e.getMessage());
+        }
     }
 }

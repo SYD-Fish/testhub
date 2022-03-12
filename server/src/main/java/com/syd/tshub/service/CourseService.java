@@ -1,7 +1,10 @@
 package com.syd.tshub.service;
 
 import com.syd.tshub.entity.CourseEntity;
+import com.syd.tshub.entity.StudentCourseEntity;
+import com.syd.tshub.entity.UserEntity;
 import com.syd.tshub.request.CourseListReq;
+import com.syd.tshub.request.StudentCourseListReq;
 import com.syd.tshub.response.base.BaseResponse;
 
 import java.util.List;
@@ -23,4 +26,10 @@ public interface CourseService {
     BaseResponse deleteCourse(List<Integer> courseIds);
 
     BaseResponse updateCourse(CourseEntity course);
+
+    BaseResponse studentSelectCourse(StudentCourseEntity studentCourse);
+
+    BaseResponse teacherConfirmCourse(StudentCourseEntity studentCourse);
+
+    BaseResponse<List<StudentCourseEntity>> listStudentCourse(StudentCourseListReq req, UserEntity user);
 }

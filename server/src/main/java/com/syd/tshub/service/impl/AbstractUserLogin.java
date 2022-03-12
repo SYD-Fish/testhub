@@ -26,6 +26,8 @@ public abstract class AbstractUserLogin implements UserLoginService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private HttpServletRequest request;
 
     
     @Override
@@ -46,6 +48,14 @@ public abstract class AbstractUserLogin implements UserLoginService {
         // 存储并返回token
         return storeAndReturnToken(token, user);
     }
+
+    @Override
+    public BaseResponse<UserEntity> getCurrentLoginUser() {
+        String token = request.getHeader("Authorization");
+        return getCurrentLoginUser(token);
+    }
+
+    protected abstract BaseResponse<UserEntity> getCurrentLoginUser(String token);
 
     private UserEntity getUserInfo(UserReq userReq) {
         return userService.getUserByLoginUser(userReq);

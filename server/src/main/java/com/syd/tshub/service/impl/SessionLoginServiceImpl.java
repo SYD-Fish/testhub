@@ -42,4 +42,9 @@ public class SessionLoginServiceImpl extends AbstractUserLogin implements UserLo
         request.getSession().removeAttribute(token);
         return BaseResponse.success();
     }
+
+    @Override
+    public BaseResponse<UserEntity> getCurrentLoginUser(String token) {
+        return BaseResponse.success((UserEntity) request.getSession().getAttribute(token));
+    }
 }

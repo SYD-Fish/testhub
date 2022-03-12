@@ -4,7 +4,6 @@ import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * GradeEntity: 数据映射实体定义
+ * StudentCourseEntity: 数据映射实体定义
  *
  * @author Powered By Fluent Mybatis
  */
@@ -29,56 +28,29 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Builder
 @FluentMybatis(
-    table = "t_grade",
+    table = "t_student_course",
     schema = "test_hub"
 )
-public class GradeEntity extends RichEntity {
+public class StudentCourseEntity extends RichEntity {
   private static final long serialVersionUID = 1L;
 
   @TableId("id")
   private Integer id;
 
-  @TableField(
-      value = "course_id",
-      desc = "课程id"
-  )
+  @TableField("course_id")
   private Integer courseId;
 
-  @TableField(
-      value = "course_name",
-      desc = "课程名称"
-  )
-  private String courseName;
+  @TableField("status")
+  private Integer status;
 
-  @TableField("create_time")
-  private Date createTime;
+  @TableField("student_id")
+  private Integer studentId;
 
-  @TableField("enbal")
-  private Integer enbal;
-
-  @TableField(
-      value = "grade",
-      desc = "成绩"
-  )
-  private Integer grade;
-
-  @TableField("update_time")
-  private Date updateTime;
-
-  @TableField(
-      value = "user_id",
-      desc = "学生id"
-  )
-  private Integer userId;
-
-  @TableField(
-      value = "user_name",
-      desc = "学生名称"
-  )
-  private String userName;
+  @TableField("student_name")
+  private String studentName;
 
   @Override
   public final Class entityClass() {
-    return GradeEntity.class;
+    return StudentCourseEntity.class;
   }
 }

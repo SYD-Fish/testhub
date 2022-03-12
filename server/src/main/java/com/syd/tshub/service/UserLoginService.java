@@ -1,5 +1,6 @@
 package com.syd.tshub.service;
 
+import com.syd.tshub.entity.UserEntity;
 import com.syd.tshub.request.UserReq;
 import com.syd.tshub.response.base.BaseResponse;
 
@@ -16,4 +17,6 @@ public interface UserLoginService {
     BaseResponse<String> login(UserReq userReq);
 
     BaseResponse logout(String token);
+
+    BaseResponse<UserEntity> getCurrentLoginUser();
 }
