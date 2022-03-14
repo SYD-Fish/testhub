@@ -1,6 +1,8 @@
 package com.syd.tshub.service.impl;
 
+import com.syd.tshub.dao.intf.UserLogDao;
 import com.syd.tshub.entity.UserEntity;
+import com.syd.tshub.entity.UserLogEntity;
 import com.syd.tshub.request.UserReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.UserLoginService;
@@ -11,6 +13,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * 类描述：
@@ -28,10 +31,17 @@ public abstract class AbstractUserLogin implements UserLoginService {
     private UserService userService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private UserLogDao userLogDao;
 
     
     @Override
     public BaseResponse<String> login(UserReq userReq) {
+        UserLogEntity logEntity = new UserLogEntity();
+        logEntity.setContent(userReq.getUsername() + " 用户开始登录");
+        logEntity.setUsername(userReq.getUsername());
+        logEntity.setCreateTime(new Date());
+        userLogDao.mapper().save(logEntity);
         // 加密
         String password = this.encryptPassword(userReq.getPassword());
         userReq.setPassword(password);
@@ -45,6 +55,11 @@ public abstract class AbstractUserLogin implements UserLoginService {
         if (StringUtils.isEmpty(token)) {
             return BaseResponse.fail("生成token失败，请联系管理员");
         }
+        UserLogEntity logEntity2 = new UserLogEntity();
+        logEntity2.setContent(userReq.getUsername() + " 用户登录成功");
+        logEntity2.setUsername(userReq.getUsername());
+        logEntity2.setCreateTime(new Date());
+        userLogDao.mapper().save(logEntity);
         // 存储并返回token
         return storeAndReturnToken(token, user);
     }
