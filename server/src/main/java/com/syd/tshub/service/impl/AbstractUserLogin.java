@@ -59,7 +59,7 @@ public abstract class AbstractUserLogin implements UserLoginService {
         logEntity2.setContent(userReq.getUsername() + " 用户登录成功");
         logEntity2.setUsername(userReq.getUsername());
         logEntity2.setCreateTime(new Date());
-        userLogDao.mapper().save(logEntity);
+        userLogDao.mapper().save(logEntity2);
         // 存储并返回token
         return storeAndReturnToken(token, user);
     }
