@@ -45,6 +45,10 @@ public class SessionLoginServiceImpl extends AbstractUserLogin implements UserLo
 
     @Override
     public BaseResponse<UserEntity> getCurrentLoginUser(String token) {
-        return BaseResponse.success((UserEntity) request.getSession().getAttribute(token));
+        UserEntity userEntity = (UserEntity) request.getSession().getAttribute(token);
+        if (userEntity == null) {
+            return BaseResponse.fail("当前用户未登录");
+        }
+        return BaseResponse.success(userEntity);
     }
 }

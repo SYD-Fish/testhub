@@ -30,7 +30,7 @@
         </filter>
         <file>${LOG_DIR}/error/${CONTEXT_NAME}-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${CONTEXT_NAME}/error/${CONTEXT_NAME}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/error/${CONTEXT_NAME}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>${KEEP_FILE_MAX_SIZE}</maxFileSize>
             <maxHistory>${KEEP_MAX_DAY}</maxHistory>
             <totalSizeCap>${KEEP_TOTAL_MAX_SIZE}</totalSizeCap>
@@ -47,7 +47,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_DIR}/${CONTEXT_NAME}/warn/${CONTEXT_NAME}-warn.log</file>
+        <file>${LOG_DIR}/warn/${CONTEXT_NAME}-warn.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/warn/${CONTEXT_NAME}-warn-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>${KEEP_FILE_MAX_SIZE}</maxFileSize>
@@ -66,7 +66,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_DIR}/${CONTEXT_NAME}/info/${CONTEXT_NAME}-info.log</file>
+        <file>${LOG_DIR}/info/${CONTEXT_NAME}-info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/info/${CONTEXT_NAME}-info-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>${KEEP_FILE_MAX_SIZE}</maxFileSize>
@@ -78,13 +78,31 @@
         </encoder>
     </appender>
 
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/info/${CONTEXT_NAME}-sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <maxFileSize>500MB</maxFileSize>
+            <fileNamePattern>/home/work/logs/fmp/sql.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
     <logger name="org.springframework.jdbc.core" level="debug" additivity="false">
         <appender-ref ref="console" />
     </logger>
 
-    <logger name="com.io.jm" level="debug" additivity="false">
-        <appender-ref ref="console" />
+    <logger name="com.syd.tshub.mapper" level="debug">
+        <appender-ref ref="SQL"/>
     </logger>
+
+<!--    <logger name="com.io.jm" level="debug" additivity="false">-->
+<!--        <appender-ref ref="console" />-->
+<!--    </logger>-->
 
     <root level="info">
         <appender-ref ref="console" />

@@ -62,7 +62,7 @@ public class CourseController {
      * @param courseId
      * @return
      */
-    @PostMapping("/student/{courseId}")
+    @GetMapping("/student/{courseId}")
     public BaseResponse selectCousre(@PathVariable("courseId") Integer courseId) {
         UserLoginService userService = userLoginFactory.getUserService();
         BaseResponse<UserEntity> currentLoginUser = userService.getCurrentLoginUser();
@@ -86,7 +86,7 @@ public class CourseController {
      * @param studentCourseId
      * @return
      */
-    @PostMapping("/teacher/{courseId}")
+    @GetMapping("/teacher/{courseId}")
     public BaseResponse confirmCousre(@PathVariable("studentCourseId") Integer studentCourseId) {
         UserLoginService userService = userLoginFactory.getUserService();
         BaseResponse<UserEntity> currentLoginUser = userService.getCurrentLoginUser();

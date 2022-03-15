@@ -4,10 +4,7 @@ import com.syd.tshub.request.base.ListBaseReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 日志管理
@@ -31,7 +28,7 @@ public class LogController {
      * @param listBaseReq
      * @return
      */
-    @GetMapping("/list")
+    @PostMapping("/list")
     public BaseResponse listLogs(@RequestBody ListBaseReq listBaseReq) {
 
         return logService.queryList(listBaseReq);
