@@ -104,11 +104,11 @@ public class CourseController {
     }
 
 
-    @PostMapping("/list/student/")
+    @PostMapping("/list/student")
     public BaseResponse<List<StudentCourseEntity>> listStudentCourse(@RequestBody StudentCourseListReq req) {
         UserLoginService userService = userLoginFactory.getUserService();
         BaseResponse<UserEntity> currentLoginUser = userService.getCurrentLoginUser();
-        if (currentLoginUser.isFail()) return BaseResponse.fail();
+        if (currentLoginUser.isFail()) return BaseResponse.fail("当前用户未登录");
         UserEntity user = currentLoginUser.getData();
         if (user.getRoleId() != 2) {
             return BaseResponse.fail(101, "没有权限");

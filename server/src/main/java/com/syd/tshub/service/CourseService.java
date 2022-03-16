@@ -31,5 +31,5 @@ public interface CourseService {
 
     BaseResponse teacherConfirmCourse(StudentCourseEntity studentCourse);
 
-    BaseResponse<List<StudentCourseEntity>> listStudentCourse(StudentCourseListReq req, UserEntity user);
+    BaseResponse listStudentCourse(StudentCourseListReq req, UserEntity user);
 }

@@ -1,5 +1,6 @@
 package com.syd.tshub.service;
 
+import com.syd.tshub.request.LogListReq;
 import com.syd.tshub.request.base.ListBaseReq;
 import com.syd.tshub.response.base.BaseResponse;
 
@@ -13,5 +14,5 @@ import com.syd.tshub.response.base.BaseResponse;
  * @Version 1.0
  */
 public interface LogService {
-    BaseResponse queryList(ListBaseReq listBaseReq);
+    BaseResponse queryList(LogListReq listBaseReq);
 }

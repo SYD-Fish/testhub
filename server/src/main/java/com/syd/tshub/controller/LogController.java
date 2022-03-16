@@ -1,5 +1,6 @@
 package com.syd.tshub.controller;
 
+import com.syd.tshub.request.LogListReq;
 import com.syd.tshub.request.base.ListBaseReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.LogService;
@@ -29,7 +30,7 @@ public class LogController {
      * @return
      */
     @PostMapping("/list")
-    public BaseResponse listLogs(@RequestBody ListBaseReq listBaseReq) {
+    public BaseResponse listLogs(@RequestBody LogListReq listBaseReq) {
 
         return logService.queryList(listBaseReq);
     }

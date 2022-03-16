@@ -1,6 +1,7 @@
 package com.syd.tshub.service.impl;
 
 import com.syd.tshub.dao.intf.UserLogDao;
+import com.syd.tshub.request.LogListReq;
 import com.syd.tshub.request.base.ListBaseReq;
 import com.syd.tshub.response.base.BaseResponse;
 import com.syd.tshub.service.LogService;
@@ -26,12 +27,12 @@ public class LogServiceImpl implements LogService {
 
 
     @Override
-    public BaseResponse queryList(ListBaseReq listBaseReq) {
+    public BaseResponse queryList(LogListReq listBaseReq) {
         UserLogQuery query = new UserLogQuery();
         if (!StringUtils.isEmpty(listBaseReq.getContent())) {
             query.where.username().eq(listBaseReq.getContent()).end();
         }
         query.limit((listBaseReq.getPageIndex() - 1) * listBaseReq.getPageSize() , listBaseReq.getPageSize());
-        return BaseResponse.success(userLogDao.mapper().listEntity(query));
+        return BaseResponse.success(userLogDao.mapper().stdPagedEntity(query));
     }
 }

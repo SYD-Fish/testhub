@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse<List<StudentCourseEntity>> listStudentCourse(StudentCourseListReq req, UserEntity user) {
+    public BaseResponse listStudentCourse(StudentCourseListReq req, UserEntity user) {
         List<CourseEntity> courses = courseDao.mapper().listEntity(new CourseQuery().where
                 .teacherId().eq(user.getUserId())
                 .and.enable().eq(1).end());
@@ -101,7 +102,7 @@ public class CourseServiceImpl implements CourseService {
             query.where.status().eq(req.getStatus());
         }
         query.limit((req.getPageIndex()-1) * req.getPageSize(), req.getPageSize());
-        List<StudentCourseEntity> list = studentCourseDao.mapper().listEntity(query);
-        return BaseResponse.success(list);
+
+        return BaseResponse.success(studentCourseDao.mapper().stdPagedEntity(query));
     }
 }
